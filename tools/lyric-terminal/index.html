@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>词端 · 歌词终端</title>
+<style>
+:root{color-scheme:light;--paper:#efefe8;--ink:#252a24;--line:#cbcec1;--lime:#cbf898;--mono:"IBM Plex Mono",Consolas,monospace}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px system-ui,"Microsoft YaHei",sans-serif}header{border-bottom:1px solid var(--line);height:66px;display:flex;align-items:center;justify-content:space-between;padding:0 max(5vw,calc((100vw - 1140px)/2));white-space:nowrap}header strong{font: bold 20px var(--mono);letter-spacing:-1px}header i{font: bold 16px var(--mono);background:#222b22;color:var(--lime);padding:5px 6px;margin-right:9px;border-radius:4px}small,.meta,.cmd,time,.count{font:12px var(--mono)}main{max-width:1190px;margin:auto;padding:36px 25px 45px}h1{font-size:clamp(32px,5vw,48px);letter-spacing:-2px;margin:0 0 6px}p{margin:0;color:#62685d}button,select,input{font:inherit}button,select{cursor:pointer;border:1px solid var(--line);border-radius:6px;background:#fafbf5;color:inherit;padding:8px 13px}button:hover{filter:brightness(.94)}:focus-visible{outline:3px solid #649341;outline-offset:2px}.deck{margin:23px 0 18px;border-radius:12px;overflow:hidden;background:#151b17;color:#d4decf;box-shadow:0 5px 12px #26332616}.bar,.transport,.panelhead,.controls{display:flex;align-items:center;gap:12px}.bar{padding:13px 20px;background:#282e28;font:12px var(--mono)}.dots{display:flex;gap:5px}.dots i{width:8px;height:8px;border-radius:50%;background:#fa937b}.dots i:nth-child(2){background:#ebc775}.dots i:last-child{background:#99bb81}.bar button{margin-left:auto;color:#d1d9cd;background:transparent;border:0;padding:2px 5px;font-size:18px}.screen{position:relative;background:radial-gradient(ellipse at 10% 70%,#243320 0%,transparent 63%),#131914}.screen:after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 3px,#080d092e 3px 4px)}.screenbody{height:clamp(238px,30vh,375px);overflow:auto;padding:23px clamp(18px,3vw,38px);scrollbar-width:thin;scrollbar-color:#455342 transparent}.cmd{color:#96ab8e;margin-bottom:17px}.rows>div{color:#9eb198;font:500 clamp(20px,2.1vw,29px)/1.65 var(--mono);letter-spacing:1px;white-space:pre-wrap;overflow-wrap:anywhere}.rows>div:last-child{color:var(--glow,var(--lime));text-shadow:0 0 12px color-mix(in srgb,var(--glow,var(--lime)) 24%,transparent)}.rows>div:before{content:"❯";font-size:.72em;margin-right:.8em}.rows>div:last-child:after{content:"";display:inline-block;width:.48em;height:.94em;background:currentColor;margin-left:.18em;vertical-align:-.07em}.transport{padding:14px 20px;background:#232a24}.transport button{border:0;background:#374035;color:#e0e6db}.transport #play{background:var(--lime);color:#1f291b;font-weight:bold;white-space:nowrap}input[type=range]{accent-color:#a8d981;min-width:30px;cursor:pointer}.transport input{flex:1;width:100%}time{white-space:nowrap}.panels{display:grid;grid-template-columns:1.25fr 1fr;gap:16px}.panel{border:1px solid var(--line);border-radius:10px;background:#f8f9f3;padding:18px 20px}.panelhead{justify-content:space-between;margin-bottom:12px}h2{font-size:17px;margin:0}.panelhead button{font-size:13px}.meta,.count,small{color:#65715e}textarea{width:100%;resize:vertical;min-height:116px;background:#eeefe7;border:1px solid var(--line);border-radius:6px;padding:10px 12px;color:#384336;font:14px/1.65 var(--mono)}.bottom,.setting{display:flex;align-items:center;justify-content:space-between;gap:10px}.bottom{margin-top:8px}.setting{min-height:46px;border-bottom:1px solid #dde0d5}.setting:last-child{border:none}.setting select{font-size:13px;padding:4px}.swatches{display:flex;gap:9px}.swatches button{width:22px;height:22px;border-radius:50%;padding:0;background:var(--swatch);border:1px solid #0002}.swatches [aria-pressed=true]{outline:2px solid #525d4f;outline-offset:2px}.solid{background:#293528;color:white;border-color:#293528}.deck:fullscreen,.deck.focus{display:flex;flex-direction:column;margin:0;border-radius:0}.deck.focus{position:fixed;inset:0;z-index:10}.deck:fullscreen .screen,.deck.focus .screen{flex:1;min-height:0}.deck:fullscreen .screenbody,.deck.focus .screenbody{height:100%}button:disabled{opacity:.55}output{font:12px var(--mono)}@media(max-width:680px){header{height:54px;padding:0 16px}main{padding:24px 12px}.panels{grid-template-columns:1fr}.transport{flex-wrap:wrap;padding:12px;gap:8px}.transport input{flex-basis:30%}.panel{padding:15px}.bar{padding:10px 14px}.screenbody{padding:18px}.transport time{font-size:10px}}
+</style></head><body>
+<header><strong><i>&gt;_</i>Lyric Terminal</strong><small>● 本地工作台</small></header>
+<main><h1>歌词终端<span style="color:#739461">_</span></h1><p>导入或粘贴歌词，让文字在终端里逐行打出。</p>
+<section class="deck" id="deck" aria-label="终端预览"><div class="bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span id="filename">session / demo.txt</span><button id="full" aria-label="切换全屏" title="切换全屏">⛶</button></div><div class="screen"><div class="screenbody" id="screen"><div class="cmd" id="command"></div><div class="rows" id="rows"></div></div></div><div class="transport"><button id="play">▶ 播放</button><button id="reset" aria-label="从头播放" title="从头播放">↺</button><input id="seek" aria-label="播放进度" type="range" min="0" max="1" step=".01" value="0"><time id="clock"></time></div></section>
+<div class="panels"><section class="panel"><div class="panelhead"><h2>歌词输入</h2><button id="importer">↥ 导入文件</button></div><input id="file" type="file" accept=".txt,.lrc,text/plain" hidden><textarea id="source" aria-label="歌词文本" placeholder="在这里粘贴歌词，每行一句…">凌晨的电台还亮着
+风把你的声音送来
+穿过城市的信号
+在我耳边醒来</textarea><div class="bottom"><small id="notice" role="status">支持 TXT / LRC</small><button class="solid" id="apply">载入歌词 ↗</button></div></section>
+<section class="panel"><div class="panelhead"><h2>终端设置</h2><span class="meta" aria-hidden="true">[ config ]</span></div><label class="setting">打字速度<select id="speed"><option value="6">慢速 · 6 字/秒</option><option value="12" selected>标准 · 12 字/秒</option><option value="24">快速 · 24 字/秒</option></select></label><label class="setting">每行间隔<select id="gap"><option value="2">2 秒</option><option value="3" selected>3 秒</option><option value="5">5 秒</option></select></label><div class="setting">终端字色<div class="swatches" id="colors"><button style="--swatch:#cbf898" data-color="#cbf898" aria-label="荧光绿" aria-pressed="true"></button><button style="--swatch:#ffd187" data-color="#ffd187" aria-label="琥珀黄" aria-pressed="false"></button><button style="--swatch:#a6e3f6" data-color="#a6e3f6" aria-label="冰蓝" aria-pressed="false"></button></div></div></section></div></main>
+<script>
+const el=id=>document.getElementById(id);
+const demo=el('source').value;
+let applied=demo,name='demo.txt',entries=[],duration=0,pos=0,playing=false,frame=0,start=0,displayKey='',showDemo=true;
+function parse(text){
+ const timed=[],plain=[];
+ const offset=Number(text.match(/\[offset:([+-]?\d+)\]/i)?.[1]||0)/1000;
+ for(const raw of text.split(/\r\n?|\n/)){
+  const stamps=[...raw.matchAll(/\[(\d+):(\d{2})(?:[.:](\d{1,3}))?\]/g)];
+  if(stamps.length){
+   const lyric=raw.slice(stamps.at(-1).index+stamps.at(-1)[0].length).trim();
+   for(const stamp of stamps) timed.push({at:Math.max(0,60*Number(stamp[1])+Number(stamp[2])+Number('0.'+(stamp[3]||'0'))-offset),text:lyric});
+  }else if(raw.trim()&&!/^\s*\[[a-z]+:.*\]\s*$/i.test(raw))plain.push(raw.trim());
+ }
+ const gap=Number(el('gap').value),speed=Number(el('speed').value);
+ let at=0;
+ const list=timed.length?timed.sort((a,b)=>a.at-b.at):plain.map(text=>{const item={at,text};at+=Math.max(gap,Array.from(text).length/speed);return item});
+ return {list,timed:!!timed.length};
+}
+const format=n=>Math.floor(n/60).toString().padStart(2,'0')+':'+Math.floor(n%60).toString().padStart(2,'0');
+function configure(text,label,preview=false){
+ const parsed=parse(text);
+ if(!parsed.list.some(e=>e.text)){el('notice').textContent='请先输入至少一句歌词';return false}
+ pause();applied=text;name=label;entries=parsed.list;entries.forEach(e=>e.chars=Array.from(e.text));showDemo=preview;
+ const last=entries.at(-1);duration=last.at+Math.max(Number(el('gap').value),last.chars.length/Number(el('speed').value)+.5);
+ pos=0;el('seek').max=duration;el('gap').disabled=parsed.timed;el('filename').textContent='session / '+name;
+ el('command').textContent='$ lyric play "'+name+'"';displayKey='';render();return true;
+}
+function render(){
+ const t=showDemo?entries[Math.min(2,entries.length-1)].at+.5:pos;
+ let low=0,high=entries.length;
+ while(low<high){const mid=Math.floor((low+high)/2);if(entries[mid].at<=t)low=mid+1;else high=mid}
+ const idx=low-1,e=entries[idx],span=e?(entries[idx+1]?.at??duration)-e.at:0;
+ const rate=e?Math.max(Number(el('speed').value),e.chars.length/Math.max(.01,span-.15)):0;
+ const chars=e?Math.min(e.chars.length,Math.floor((t-e.at)*rate)+1):0;
+ const key=idx+'/'+chars;
+ if(displayKey!==key){displayKey=key;const nodes=entries.slice(Math.max(0,idx-24),idx+1).map((line,i,arr)=>{const node=document.createElement('div');node.textContent=i===arr.length-1?line.chars.slice(0,chars).join(''):line.text;return node});el('rows').replaceChildren(...nodes);el('screen').scrollTop=el('screen').scrollHeight}
+ el('seek').value=pos;el('clock').textContent=format(pos)+' / '+format(duration);
+}
+function pause(){if(playing)pos=Math.min(duration,(performance.now()-start)/1000);playing=false;cancelAnimationFrame(frame);el('play').textContent='▶ 播放'}
+function tick(now){pos=Math.min(duration,(now-start)/1000);render();if(pos>=duration)pause();else frame=requestAnimationFrame(tick)}
+function play(){showDemo=false;if(pos>=duration)pos=0;playing=true;start=performance.now()-pos*1000;el('play').textContent='Ⅱ 暂停';frame=requestAnimationFrame(tick)}
+el('play').onclick=()=>playing?pause():play();
+el('reset').onclick=()=>{pause();pos=0;play()};
+el('seek').oninput=()=>{showDemo=false;pos=Number(el('seek').value);start=performance.now()-pos*1000;render()};
+el('apply').onclick=()=>{if(configure(el('source').value,'lyrics.txt')){el('notice').textContent='已载入 · '+entries.length+' 行';play()}};
+el('importer').onclick=()=>el('file').click();
+el('file').onchange=async event=>{const f=event.target.files[0];if(!f)return;try{const text=await f.text();if(configure(text,f.name)){el('source').value=text;el('notice').textContent='已导入 · '+entries.length+' 行';play()}}catch{el('notice').textContent='文件读取失败，请重试'}event.target.value=''};
+for(const id of ['gap','speed'])el(id).onchange=()=>{const active=playing,old=pos;configure(applied,name,showDemo);pos=Math.min(old,duration);render();if(active)play()};
+el('colors').onclick=event=>{const color=event.target.dataset.color;if(!color)return;el('deck').style.setProperty('--glow',color);for(const b of el('colors').children)b.setAttribute('aria-pressed',String(b===event.target))};
+el('full').onclick=async()=>{const deck=el('deck');if(document.fullscreenElement)await document.exitFullscreen();else if(deck.classList.contains('focus'))deck.classList.remove('focus');else try{await deck.requestFullscreen()}catch{deck.classList.add('focus')}};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')el('deck').classList.remove('focus')});
+configure(demo,name,true);
+</script></body></html>
