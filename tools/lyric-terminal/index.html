@@ -1,17 +1,19 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>词端 · 歌词终端</title>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<title>命令提示符歌词工具</title>
 <style>
-:root{color-scheme:light;--paper:#efefe8;--ink:#252a24;--line:#cbcec1;--lime:#cbf898;--mono:"IBM Plex Mono",Consolas,monospace}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px system-ui,"Microsoft YaHei",sans-serif}header{border-bottom:1px solid var(--line);height:66px;display:flex;align-items:center;justify-content:space-between;padding:0 max(5vw,calc((100vw - 1140px)/2));white-space:nowrap}header strong{font: bold 20px var(--mono);letter-spacing:-1px}header i{font: bold 16px var(--mono);background:#222b22;color:var(--lime);padding:5px 6px;margin-right:9px;border-radius:4px}small,.meta,.cmd,time,.count{font:12px var(--mono)}main{max-width:1190px;margin:auto;padding:36px 25px 45px}h1{font-size:clamp(32px,5vw,48px);letter-spacing:-2px;margin:0 0 6px}p{margin:0;color:#62685d}button,select,input{font:inherit}button,select{cursor:pointer;border:1px solid var(--line);border-radius:6px;background:#fafbf5;color:inherit;padding:8px 13px}button:hover{filter:brightness(.94)}:focus-visible{outline:3px solid #649341;outline-offset:2px}.deck{margin:23px 0 18px;border-radius:12px;overflow:hidden;background:#151b17;color:#d4decf;box-shadow:0 5px 12px #26332616}.bar,.transport,.panelhead,.controls{display:flex;align-items:center;gap:12px}.bar{padding:13px 20px;background:#282e28;font:12px var(--mono)}.dots{display:flex;gap:5px}.dots i{width:8px;height:8px;border-radius:50%;background:#fa937b}.dots i:nth-child(2){background:#ebc775}.dots i:last-child{background:#99bb81}.bar button{margin-left:auto;color:#d1d9cd;background:transparent;border:0;padding:2px 5px;font-size:18px}.screen{position:relative;background:radial-gradient(ellipse at 10% 70%,#243320 0%,transparent 63%),#131914}.screen:after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 3px,#080d092e 3px 4px)}.screenbody{height:clamp(238px,30vh,375px);overflow:auto;padding:23px clamp(18px,3vw,38px);scrollbar-width:thin;scrollbar-color:#455342 transparent}.cmd{color:#96ab8e;margin-bottom:17px}.rows>div{color:#9eb198;font:500 clamp(20px,2.1vw,29px)/1.65 var(--mono);letter-spacing:1px;white-space:pre-wrap;overflow-wrap:anywhere}.rows>div:last-child{color:var(--glow,var(--lime));text-shadow:0 0 12px color-mix(in srgb,var(--glow,var(--lime)) 24%,transparent)}.rows>div:before{content:"❯";font-size:.72em;margin-right:.8em}.rows>div:last-child:after{content:"";display:inline-block;width:.48em;height:.94em;background:currentColor;margin-left:.18em;vertical-align:-.07em}.transport{padding:14px 20px;background:#232a24}.transport button{border:0;background:#374035;color:#e0e6db}.transport #play{background:var(--lime);color:#1f291b;font-weight:bold;white-space:nowrap}input[type=range]{accent-color:#a8d981;min-width:30px;cursor:pointer}.transport input{flex:1;width:100%}time{white-space:nowrap}.panels{display:grid;grid-template-columns:1.25fr 1fr;gap:16px}.panel{border:1px solid var(--line);border-radius:10px;background:#f8f9f3;padding:18px 20px}.panelhead{justify-content:space-between;margin-bottom:12px}h2{font-size:17px;margin:0}.panelhead button{font-size:13px}.meta,.count,small{color:#65715e}textarea{width:100%;resize:vertical;min-height:116px;background:#eeefe7;border:1px solid var(--line);border-radius:6px;padding:10px 12px;color:#384336;font:14px/1.65 var(--mono)}.bottom,.setting{display:flex;align-items:center;justify-content:space-between;gap:10px}.bottom{margin-top:8px}.setting{min-height:46px;border-bottom:1px solid #dde0d5}.setting:last-child{border:none}.setting select{font-size:13px;padding:4px}.swatches{display:flex;gap:9px}.swatches button{width:22px;height:22px;border-radius:50%;padding:0;background:var(--swatch);border:1px solid #0002}.swatches [aria-pressed=true]{outline:2px solid #525d4f;outline-offset:2px}.solid{background:#293528;color:white;border-color:#293528}.deck:fullscreen,.deck.focus{display:flex;flex-direction:column;margin:0;border-radius:0}.deck.focus{position:fixed;inset:0;z-index:10}.deck:fullscreen .screen,.deck.focus .screen{flex:1;min-height:0}.deck:fullscreen .screenbody,.deck.focus .screenbody{height:100%}button:disabled{opacity:.55}output{font:12px var(--mono)}@media(max-width:680px){header{height:54px;padding:0 16px}main{padding:24px 12px}.panels{grid-template-columns:1fr}.transport{flex-wrap:wrap;padding:12px;gap:8px}.transport input{flex-basis:30%}.panel{padding:15px}.bar{padding:10px 14px}.screenbody{padding:18px}.transport time{font-size:10px}}
-</style></head><body>
-<header><strong><i>&gt;_</i>Lyric Terminal</strong><small>● 本地工作台</small></header>
-<main><h1>歌词终端<span style="color:#739461">_</span></h1><p>导入或粘贴歌词，让文字在终端里逐行打出。</p>
-<section class="deck" id="deck" aria-label="终端预览"><div class="bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span id="filename">session / demo.txt</span><button id="full" aria-label="切换全屏" title="切换全屏">⛶</button></div><div class="screen"><div class="screenbody" id="screen"><div class="cmd" id="command"></div><div class="rows" id="rows"></div></div></div><div class="transport"><button id="play">▶ 播放</button><button id="reset" aria-label="从头播放" title="从头播放">↺</button><input id="seek" aria-label="播放进度" type="range" min="0" max="1" step=".01" value="0"><time id="clock"></time></div></section>
-<div class="panels"><section class="panel"><div class="panelhead"><h2>歌词输入</h2><button id="importer">↥ 导入文件</button></div><input id="file" type="file" accept=".txt,.lrc,text/plain" hidden><textarea id="source" aria-label="歌词文本" placeholder="在这里粘贴歌词，每行一句…">凌晨的电台还亮着
+*{box-sizing:border-box}body{margin:0;background:#f0f0f0;color:#151515;font:14px/1.5 "Segoe UI","Microsoft YaHei",sans-serif}main{max-width:1200px;margin:0 auto;padding:24px}button,select,input,textarea{font:inherit}button,select{background:#e8e8e8;border:1px solid #888;border-radius:0;color:#111;padding:4px 12px}button{cursor:pointer}button:hover{background:#e3eff9;border-color:#0078d7}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #0067b8;outline-offset:1px}
+.deck{border:1px solid #777;background:#0c0c0c}.bar,.transport,.actions,.setting{display:flex;align-items:center;gap:8px}.bar{background:white;height:33px;padding-left:9px}.icon{font:bold 10px Consolas,monospace;color:white;background:#111;border:1px solid #888;padding:0 2px}.bar #filename{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.bar button{height:100%;margin-left:auto;background:white;border:0;padding:0 16px;font-size:18px}.bar button:hover{background:#ddd}.screenbody{height:clamp(275px,49vh,580px);overflow:auto;padding:4px 8px;color:var(--text,#ccc);font:var(--size,20px)/1.28 Consolas,"Lucida Console","Microsoft YaHei Mono",monospace;overflow-wrap:anywhere}.cmd{margin:1.28em 0 0}.rows>div{white-space:pre-wrap}.rows>div:last-child:after{content:"";display:inline-block;width:.6em;border-bottom:.13em solid currentColor;margin-left:1px}.transport{padding:8px;background:#f0f0f0;border-top:1px solid #888}.transport input{flex:1;width:0;min-width:40px}time{font:13px Consolas,monospace}input{accent-color:#0078d7}.panels{display:grid;grid-template-columns:3fr 2fr;gap:16px;margin:16px 0}fieldset{min-width:0;border:1px solid #aaa;padding:12px}legend{padding:0 6px}textarea{width:100%;height:108px;resize:vertical;padding:6px;background:white;color:#111;border:1px solid #888}.actions{flex-wrap:wrap;margin-top:8px}.setting{justify-content:space-between;min-height:34px}.setting input[type=range]{width:clamp(60px,14vw,180px)}.setting span{display:flex;align-items:center;gap:8px}.setting output{min-width:40px}#notice{display:block;padding-top:7px;color:#444}.deck:fullscreen,.deck.focus,body[data-player=true] .deck{height:100dvh;display:flex;flex-direction:column}.deck.focus{position:fixed;inset:0;z-index:10}.deck:fullscreen .screenbody,.deck.focus .screenbody,body[data-player=true] .screenbody{flex:1;min-height:0}.deck:fullscreen .bar,.deck.focus .bar{flex-shrink:0}body[data-player=true] main{max-width:none;padding:0}body[data-player=true] .panels{display:none}@media(max-width:680px){main{padding:6px}.panels{grid-template-columns:1fr;gap:8px;margin:8px 0}.transport{gap:4px;flex-wrap:wrap}.transport button{padding:5px 8px}.setting input[type=range]{width:110px}}
+</style></head><body><main>
+<section id="deck" class="deck" aria-label="命令提示符"><div class="bar"><span aria-hidden="true" class="icon">C:&#92;_</span><span id="filename">命令提示符</span><button id="full" title="切换全屏" aria-label="切换全屏">□</button></div>
+<div class="screenbody" id="screen"><div>Microsoft Windows [版本 10.0.19045]</div><div>(c) Microsoft Corporation。保留所有权利。</div><div class="cmd" id="command"></div><div class="rows" id="rows"></div></div>
+<div class="transport"><button id="play">▶ 播放</button><button id="reset">从头播放</button><input id="seek" type="range" aria-label="播放进度" min="0" max="1" step=".01" value="0"><time id="clock"></time></div></section>
+<div class="panels"><fieldset><legend>歌词文件</legend><input id="file" type="file" accept=".lrc,.txt,text/plain" hidden><textarea id="source" aria-label="歌词文本" placeholder="粘贴歌词，每行一句">凌晨的电台还亮着
 风把你的声音送来
 穿过城市的信号
-在我耳边醒来</textarea><div class="bottom"><small id="notice" role="status">支持 TXT / LRC</small><button class="solid" id="apply">载入歌词 ↗</button></div></section>
-<section class="panel"><div class="panelhead"><h2>终端设置</h2><span class="meta" aria-hidden="true">[ config ]</span></div><label class="setting">打字速度<select id="speed"><option value="6">慢速 · 6 字/秒</option><option value="12" selected>标准 · 12 字/秒</option><option value="24">快速 · 24 字/秒</option></select></label><label class="setting">每行间隔<select id="gap"><option value="2">2 秒</option><option value="3" selected>3 秒</option><option value="5">5 秒</option></select></label><div class="setting">终端字色<div class="swatches" id="colors"><button style="--swatch:#cbf898" data-color="#cbf898" aria-label="荧光绿" aria-pressed="true"></button><button style="--swatch:#ffd187" data-color="#ffd187" aria-label="琥珀黄" aria-pressed="false"></button><button style="--swatch:#a6e3f6" data-color="#a6e3f6" aria-label="冰蓝" aria-pressed="false"></button></div></div></section></div></main>
-<script>
+在我耳边醒来</textarea><div class="actions"><button id="importer">打开本地文件…</button><button id="apply">载入歌词</button><button id="export">导出离线 HTML…</button></div><small id="notice" role="status">TXT / LRC 文件仅在本机读取。</small></fieldset>
+<fieldset><legend>显示与播放</legend><label class="setting">字号<span><input type="range" id="size" min="12" max="72" value="20"><output id="sizeValue" for="size">20 px</output></span></label><label class="setting">文字颜色<input type="color" id="color" value="#cccccc"></label><label class="setting">打字速度<select id="speed"><option value="6">6 字/秒</option><option value="12" selected>12 字/秒</option><option value="24">24 字/秒</option></select></label><label class="setting">每行间隔<select id="gap"><option value="2">2 秒</option><option value="3" selected>3 秒</option><option value="5">5 秒</option></select></label></fieldset></div></main><script>
 const el=id=>document.getElementById(id);
 const demo=el('source').value;
 let applied=demo,name='demo.txt',entries=[],duration=0,pos=0,playing=false,frame=0,start=0,displayKey='',showDemo=true;
@@ -36,8 +38,8 @@ function configure(text,label,preview=false){
  if(!parsed.list.some(e=>e.text)){el('notice').textContent='请先输入至少一句歌词';return false}
  pause();applied=text;name=label;entries=parsed.list;entries.forEach(e=>e.chars=Array.from(e.text));showDemo=preview;
  const last=entries.at(-1);duration=last.at+Math.max(Number(el('gap').value),last.chars.length/Number(el('speed').value)+.5);
- pos=0;el('seek').max=duration;el('gap').disabled=parsed.timed;el('filename').textContent='session / '+name;
- el('command').textContent='$ lyric play "'+name+'"';displayKey='';render();return true;
+ pos=0;el('seek').max=duration;el('gap').disabled=parsed.timed;el('filename').textContent='命令提示符 - '+name;
+ el('command').textContent='C:\\Lyrics>type "'+name+'"';displayKey='';render();return true;
 }
 function render(){
  const t=showDemo?entries[Math.min(2,entries.length-1)].at+.5:pos;
@@ -60,8 +62,45 @@ el('apply').onclick=()=>{if(configure(el('source').value,'lyrics.txt')){el('noti
 el('importer').onclick=()=>el('file').click();
 el('file').onchange=async event=>{const f=event.target.files[0];if(!f)return;try{const text=await f.text();if(configure(text,f.name)){el('source').value=text;el('notice').textContent='已导入 · '+entries.length+' 行';play()}}catch{el('notice').textContent='文件读取失败，请重试'}event.target.value=''};
 for(const id of ['gap','speed'])el(id).onchange=()=>{const active=playing,old=pos;configure(applied,name,showDemo);pos=Math.min(old,duration);render();if(active)play()};
-el('colors').onclick=event=>{const color=event.target.dataset.color;if(!color)return;el('deck').style.setProperty('--glow',color);for(const b of el('colors').children)b.setAttribute('aria-pressed',String(b===event.target))};
 el('full').onclick=async()=>{const deck=el('deck');if(document.fullscreenElement)await document.exitFullscreen();else if(deck.classList.contains('focus'))deck.classList.remove('focus');else try{await deck.requestFullscreen()}catch{deck.classList.add('focus')}};
 document.addEventListener('keydown',e=>{if(e.key==='Escape')el('deck').classList.remove('focus')});
-configure(demo,name,true);
+
+const exported=document.body.dataset.player==='true';
+function updateAppearance(){
+ document.documentElement.style.setProperty('--size',el('size').value+'px');
+ document.documentElement.style.setProperty('--text',el('color').value);
+ el('sizeValue').textContent=el('size').value+' px';
+}
+el('size').oninput=el('color').oninput=updateAppearance;
+function exportPlayer(){
+ const text=el('source').value;
+ if(!parse(text).list.some(line=>line.text)){el('notice').textContent='请先输入歌词';return}
+ const label=text===applied?name:'lyrics.txt';
+ const root=document.documentElement.cloneNode(true);
+ const get=id=>root.querySelector('#'+id);
+ root.querySelector('body').dataset.player='true';
+ root.querySelector('body').dataset.track=label;
+ root.querySelector('title').textContent='命令提示符 - '+label;
+ get('source').textContent=text;
+ get('rows').replaceChildren();
+ get('command').textContent='';
+ get('deck').classList.remove('focus');
+ for(const id of ['size','color'])get(id).setAttribute('value',el(id).value);
+ for(const id of ['speed','gap']){
+  for(const option of get(id).options)option.toggleAttribute('selected',option.value===el(id).value);
+ }
+ const url=URL.createObjectURL(new Blob(['<!doctype html>\n',root.outerHTML],{type:'text/html;charset=utf-8'}));
+ const link=document.createElement('a');
+ link.href=url;
+ link.download=label.replace(/\.[^.]+$/,'')+'-命令提示符.html';
+ document.body.append(link);
+ link.click();
+ link.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),60000);
+ el('notice').textContent='已生成离线播放页';
+}
+el('export').onclick=exportPlayer;
+updateAppearance();
+configure(demo,exported?document.body.dataset.track:name,!exported);
+if(exported)play();
 </script></body></html>
