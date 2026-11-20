@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>时序手记 · 时间轴记事本</title>
+<style>
+* { box-sizing: border-box }
+body { margin: 0; background: #f4f4f2; color: #222; font: 16px/1.6 system-ui,"Microsoft YaHei",sans-serif }
+main { max-width: 1280px; margin: auto; padding: 26px clamp(12px,3vw,40px) 40px }
+header,.bar,.status,.glyphs,.actions { display: flex; align-items: center; gap: 10px }
+header,.bar,.status { justify-content: space-between }
+header { border-top: 4px solid #222; border-bottom: 1px solid #333; padding: 15px 0; margin-bottom: 18px; flex-wrap: wrap }
+h1,h2,p { margin: 0 } h1 { font: bold clamp(28px,4vw,40px)/1.2 Georgia,"Songti SC","SimSun",serif; letter-spacing: .04em }
+h2,summary { font-size: 16px; font-weight: 650 }
+button,input,select,textarea { font: inherit; color: inherit }
+button,select,input:not([type=color]),textarea { border: 1px solid #a4a4a4; border-radius: 0; background: white }
+button { padding: 7px 12px; cursor: pointer } button:hover { background: #eee }
+.primary { background: #242424; color: white; border-color: #242424 }.primary:hover { background: #444 }
+button:disabled { opacity: .45; cursor: default }
+:focus-visible { outline: 2px solid #30569a; outline-offset: 2px }
+.grid { display: grid; grid-template-columns: minmax(0,.95fr) minmax(0,1.05fr); gap: 18px; align-items: start }
+.panel,details.settings { background: white; border: 1px solid #aaa }
+.bar,details.settings>summary { background: #ededeb; padding: 8px 14px; border-bottom: 1px solid #aaa }
+.bar small,.status,details.help { color: #555; font-size: 14px }
+.edit,.options { padding: 14px }
+.edit label,.field { display: grid; gap: 4px; font-size: 14px }
+.edit label+label { margin-top: 12px }
+input:not([type=color]),select { padding: 5px 7px; min-width: 0 }
+.edit input,.edit textarea { width: 100%; font-size: 16px }
+textarea { display: block; min-height: 250px; resize: vertical; line-height: 1.75; padding: 9px }
+.status { border-top: 1px solid #ddd; padding: 7px 14px }
+.settings { margin-top: 14px }
+summary { cursor: pointer }
+.settings:not([open])>summary { border-bottom: 0 }
+.fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px }
+.wide { grid-column: 1/-1 }.fontrow { display: grid; grid-template-columns: minmax(75px,1fr) 90px 64px; align-items: center; gap: 8px; padding: 5px 0; font-size: 14px }
+.fontrow input { width: 100%; height: 33px }
+.fonthead { margin-top: 14px; border-top: 1px solid #aaa; color: #555 }
+.stage { padding: clamp(8px,2vw,22px); background: #e5e5e2; max-height: 85vh; overflow: auto }
+.page { background: white; border: 1px solid #bbb }.page svg { width: 100%; height: auto; display: block }
+.help { padding: 8px 14px; border-top: 1px solid #ddd }.help summary { font-weight: normal; font-size: 14px }
+dialog { border: 1px solid #555; width: min(540px,95%); max-height: 88vh; padding: 0 }
+dialog p { padding: 8px 14px }dialog img { display: block; width: 100% }dialog::backdrop { background: #0007 }
+[hidden] { display: none!important }#msg { margin-top: 8px }
+@media(max-width:760px){main{padding-top:12px}.grid{grid-template-columns:minmax(0,1fr)}.stage{max-height:75vh}.actions{flex-wrap:wrap}.fields select,.fields input{font-size:16px}}
+</style>
+</head>
+<body><main>
+<header><h1>时序手记</h1><div class="actions"><button id="backup">保存文本</button><button class="primary" id="exportBtn">导出 PNG 长图</button></div></header>
+<div class="grid"><div>
+<section class="panel"><div class="bar"><h2>笔记编辑</h2><small id="saved"></small></div>
+<div class="edit"><label>标题<input id="title" placeholder="笔记标题"></label>
+<label>正文<textarea id="note" placeholder="2002年发生了一件事……"></textarea></label></div>
+<div class="status"><span id="chars"></span><span>按原文顺序排列</span></div>
+<details class="help"><summary>可识别的时间格式</summary><p>在行首写 00:12、01:03.500、1:02:03、2026-11-20、11月20日、2002年、AD1356 或 DAY 2。后续普通行归入上一节点。首个时间前的文字仅保存在笔记中。</p></details></section>
+<details open class="settings"><summary>时间轴样式</summary><div class="options" id="styles">
+<div class="fields"><label class="field wide">时间文字<select id="mode"><option value="keep">保留完整原句</option><option value="split">提取时间，单独显示</option></select></label>
+<label class="field">线型<select id="line"><option value="solid">实线</option><option value="dash">虚线</option><option value="double">双线</option></select></label>
+<label class="field">节点<select id="shape"><option value="dot">●　实心圆</option><option value="ring">○　空心圆</option><option value="square">■　方块</option><option value="diamond">◆　菱形</option><option value="custom">自定义符号</option></select></label>
+<label id="customField" hidden class="field wide">节点符号<input id="symbol" value="✦" placeholder="例如 ★、✿ 或 ♫"></label></div>
+<div class="fontrow fonthead"><span>文字区域</span><span>字号 (px)</span><span>颜色</span></div><div id="fonts"></div>
+</div></details></div>
+<section class="panel"><div class="bar"><h2>长图预览</h2><small id="count"></small></div><div class="stage"><div class="page" id="page"></div></div></section>
+</div><p id="msg" role="status"></p>
+<dialog id="result"><div class="bar"><h2>时间轴长图</h2><button id="closeBtn">关闭</button></div><p>长按图片保存，或<a id="download">下载 PNG</a>。</p><img id="output" alt="导出的时间轴长图"></dialog>
+</main><script>
+'use strict';
+const el=id=>document.getElementById(id);
+const key='shoushu.timeline-notebook.v1';
+const demo={title:'海边的一天 · 分镜手记',note:'00:00  海岸，清晨\n镜头从潮湿的沙面缓缓抬起。\n\n00:08  第一班渡轮\n汽笛响起，白色船身驶入画面。\n\n00:24  逆光的人影\n风吹起衣角，切到手部特写。\n\n00:42  潮声渐远\n海鸟掠过水面，画面淡出。'};
+const note=el('note'), title=el('title');
+const clock=String.raw`\d{1,3}[:：][0-5]\d(?:[:：][0-5]\d)?(?:[.,]\d{1,3})?`;
+const day=String.raw`(?:\d{4}[-/.]\d{1,2}[-/.]\d{1,2}|(?:\d{4}年)?\d{1,2}月\d{1,2}[日号]?)`;
+const marker=new RegExp(String.raw`^\s*(?:[-*•]\s+)?[【\[]?((?:${day})(?:[ T]+${clock})?|${clock}|AD\s*\d{1,6}(?:\s*[-–—]\s*\d{1,6})?|\d{1,4}年|DAY\s*\d+|第\s*[零一二三四五六七八九十百\d]+\s*天)(?![\d:：]\d)[】\]]?\s*(?:[|｜：:、，,]|[-—–](?=\s))?\s*(.*)$`,'i');
+const regions = [
+  {id:'heading', label:'标题', size:28, color:'#222222'},
+  {id:'time', label:'时间标签', size:15, color:'#595959'},
+  {id:'body', label:'正文', size:17, color:'#252525'}
+];
+for (const region of regions) {
+  const row = document.createElement('div');
+  row.className = 'fontrow';
+  row.innerHTML = `<span>${region.label}</span>
+    <input type="number" min="10" max="60" aria-label="${region.label}字号" id="${region.id}Size" value="${region.size}">
+    <input type="color" aria-label="${region.label}颜色" id="${region.id}Color" value="${region.color}">`;
+  el('fonts').append(row);
+}
+const controls = [...el('styles').querySelectorAll('select,input')];
+let sample = true;
+try {
+  const data = JSON.parse(localStorage.getItem(key));
+  if (typeof data?.note === 'string' && typeof data.title === 'string') {
+    note.value = data.note;
+    title.value = data.title;
+    sample = false;
+    for (const input of controls) {
+      const value = data.styles?.[input.id];
+      if (typeof value === 'string') {
+        const original = input.value;
+        input.value = value;
+        if (!input.value || !input.checkValidity()) input.value = original;
+      }
+    }
+  }
+} catch {}
+if (sample) { note.value = demo.note; title.value = demo.title }
+el('saved').textContent = sample ? '可编辑的示例' : '已恢复本地笔记';
+
+function parse(value, separate) {
+  const rows = [];
+  for (const line of value.split(/\r?\n/)) {
+    const match = line.match(marker);
+    if (match) rows.push({time:separate ? match[1] : '', lines:[separate ? match[2] : line]});
+    else if (rows.length) rows.at(-1).lines.push(line);
+  }
+  for (const row of rows) {
+    while (row.lines.length && !row.lines.at(-1).trim()) row.lines.pop();
+    if (separate && !row.lines[0]) row.lines.shift();
+  }
+  return rows;
+}
+const svgNS = 'http://www.w3.org/2000/svg';
+const measure = document.createElement('canvas').getContext('2d');
+function append(parent, tag, attributes, value) {
+  const element = document.createElementNS(svgNS, tag);
+  for (const [key,val] of Object.entries(attributes)) element.setAttribute(key,val);
+  if (value !== undefined) element.textContent = value;
+  parent.append(element);
+  return element;
+}
+function font(id) {
+  const region = regions.find(region => region.id === id);
+  return {size:Math.min(60,Math.max(10,Number(el(id+'Size').value)||region.size)),
+    color:el(id+'Color').value, weight:id==='heading'?'bold':'normal',
+    family:id==='heading'?'serif':'sans-serif'};
+}
+function drawText(svg, paragraphs, x, top, style) {
+  const {size,color,weight,family} = style;
+  measure.font = weight+' '+size+'px '+family;
+  const attrs = {x, fill:color,'font-size':size,'font-weight':weight,'font-family':family};
+  function draw(line) {
+    append(svg,'text',{...attrs,y:top+size,'xml:space':'preserve'},line);
+    top += Math.ceil(size*1.55);
+  }
+  for (const paragraph of paragraphs) {
+    let line = '';
+    for (const ch of paragraph) {
+      if (line && measure.measureText(line+ch).width > 530-x) { draw(line); line=''; }
+      line += ch;
+    }
+    draw(line);
+  }
+  return top;
+}
+function drawNode(group, y) {
+  const shape = el('shape').value;
+  if (shape === 'custom') {
+    append(group,'rect',{x:17,y:y-10,width:28,height:20,fill:'white'});
+    const symbol = el('symbol').value.trim() || '●';
+    measure.font = '16px sans-serif';
+    const size = Math.min(16,16*26/Math.max(1,measure.measureText(symbol).width));
+    append(group,'text',{x:31,y,'text-anchor':'middle','dominant-baseline':'central','font-family':'sans-serif','font-size':size},symbol);
+  } else if (shape==='dot' || shape==='ring') {
+    append(group,'circle',{cx:31,cy:y,r:4.5,stroke:'#333',fill:shape==='ring'?'white':'#333'});
+  } else {
+    append(group,'rect',{x:27,y:y-4,width:8,height:8,fill:'#333',transform:shape==='diamond'?'rotate(45 31 '+y+')':''});
+  }
+}
+let imageURL = '';
+function render() {
+  const separate = el('mode').value==='split';
+  const rows = parse(note.value,separate);
+  el('customField').hidden = el('shape').value!=='custom';
+  el('timeSize').disabled = el('timeColor').disabled = !separate;
+  el('count').textContent = rows.length+' 个节点';
+  el('chars').textContent = Array.from(note.value).length+' 字符';
+  el('exportBtn').disabled = !rows.length;
+  const svg = document.createElementNS(svgNS,'svg');
+  svg.setAttribute('role','img');
+  append(svg,'title',{},title.value || '未命名笔记');
+  append(svg,'rect',{width:'100%',height:'100%',fill:'white'});
+  let y = drawText(svg,[title.value.trim()||'未命名笔记'],26,23,font('heading'))+10;
+  append(svg,'line',{x1:26,x2:534,y1:y,y2:y,stroke:'#aaa'});
+  y += 22;
+  const axis = append(svg,'g',{stroke:'#555'});
+  const nodes = [];
+  const body = font('body'), time = font('time');
+  for (const row of rows) {
+    nodes.push(y+(separate?time.size:body.size)*0.65);
+    if (separate) y = drawText(svg,[row.time],56,y,time)+3;
+    y = drawText(svg,row.lines,56,y,body)+20;
+  }
+  if (!nodes.length) y = drawText(svg,['在正文行首输入时间，即可预览。'],26,y,body);
+  if (nodes.length>1) {
+    const type = el('line').value;
+    for (const x of type==='double'?[29,33]:[31]) {
+      append(axis,'line',{x1:x,x2:x,y1:nodes[0],y2:nodes.at(-1),'stroke-dasharray':type==='dash'?'5 4':'none'});
+    }
+  }
+  for (const point of nodes) drawNode(svg,point);
+  svg.setAttribute('viewBox','0 0 560 '+Math.ceil(y+16));
+  el('page').replaceChildren(svg);
+}
+function update() {
+  render();
+  const styles = Object.fromEntries(controls.map(input=>[input.id,input.value]));
+  try {
+    localStorage.setItem(key,JSON.stringify({title:title.value,note:note.value,styles}));
+    el('saved').textContent='已保存到本机';
+  } catch { el('saved').textContent='本地保存失败，请保存文本'; }
+}
+for (const input of [title,note,...controls]) input.addEventListener('input',update);
+for (const region of regions) {
+  const size = el(region.id+'Size');
+  size.onchange = () => { size.value=font(region.id).size; update(); };
+}
+render();
+function filename() { return (title.value.trim()||'未命名笔记').replace(/[\\/:*?"<>|]/g,'_').slice(0,80); }
+el('backup').onclick=()=>{const url=URL.createObjectURL(new Blob([title.value+'\n\n'+note.value],{type:'text/plain;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download=filename()+'.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),60000)};
+async function exportImage() {
+  const svg = el('page').firstElementChild.cloneNode(true);
+  const {width,height} = svg.viewBox.baseVal;
+  const scale = Math.min(2,16000/height,Math.sqrt(16000000/(width*height)));
+  if (scale<0.55) throw Error('这篇笔记超出单张长图容量，请分段导出。');
+  const canvas = document.createElement('canvas');
+  canvas.width = Math.ceil(width*scale);
+  canvas.height = Math.ceil(height*scale);
+  svg.setAttribute('width',canvas.width);
+  svg.setAttribute('height',canvas.height);
+  const src = URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(svg)],{type:'image/svg+xml;charset=utf-8'}));
+  try {
+    const image = new Image();
+    image.src = src;
+    await image.decode();
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.drawImage(image,0,0);
+  } finally { URL.revokeObjectURL(src); }
+  const blob = await new Promise(resolve=>canvas.toBlob(resolve,'image/png'));
+  if (!blob) throw Error('图片生成失败，请缩短笔记重试。');
+  if (imageURL) URL.revokeObjectURL(imageURL);
+  imageURL=URL.createObjectURL(blob);
+  el('output').src=el('download').href=imageURL;
+  el('download').download=filename()+'.png';
+  el('result').showModal();
+}
+el('exportBtn').onclick = async () => {
+  el('exportBtn').disabled=true;
+  el('msg').textContent='';
+  try { await exportImage(); }
+  catch(error) { el('msg').textContent=error.message; }
+  finally { el('exportBtn').disabled=!parse(note.value,false).length; }
+};
+el('closeBtn').onclick = () => el('result').close();
+</script></body></html>
