@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <TargetFramework>net462</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <OutputType>WinExe</OutputType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="../index.html" LogicalName="Calendar.html" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2903.40" GeneratePathProperty="true" />
+  </ItemGroup>
+  <Target Name="PlaceLoaderBesideExecutable" AfterTargets="Build">
+    <Copy SourceFiles="$(PkgMicrosoft_Web_WebView2)/build/native/x64/WebView2Loader.dll" DestinationFolder="$(TargetDir)" />
+  </Target>
+</Project>
