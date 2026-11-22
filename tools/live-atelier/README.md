@@ -2,13 +2,13 @@
 
 给画师的 Windows 桌面工作台。用日历排委托，在旁边摆参考图，画画时把窗口收成一枚工时表盘。
 
-**1.7.1 · Windows x64**　[下载完整 ZIP](https://github.com/MemeSubmarine/core-docking-station/raw/refs/heads/main/tools/live-atelier/LiveAtelier-1.7.1-Windows-x64.zip)
+**1.7.2 · Windows x64**　[下载单文件启动版](https://github.com/MemeSubmarine/core-docking-station/raw/refs/heads/main/tools/live-atelier/LiveAtelier-1.7.2-Windows-x64.exe)
 
 ## 第一次打开
 
-1. 下载并解压整个 ZIP 到一个文件夹。
-2. 双击文件夹里的 **ArtistDesk.exe**。保留同目录的 DLL、ui 文件夹和 ocr.ps1。
-3. 将鼠标停在悬浮球上，点「日历」进入工作台。用顶栏切换横屏或竖屏，拖动日历与参考图之间的分隔条调整比例。
+1. 下载并双击 LiveAtelier-1.7.2-Windows-x64.exe。
+2. 启动器自动展开完整程序并打开工作台。
+3. 需要悬浮计时时，点击右上角「小表盘」。用顶栏切换横屏或竖屏，拖动日历与参考图之间的分隔条调整比例。
 
 运行需要 Windows x64、.NET Framework 4.6.2 或兼容的更新版本，以及 Microsoft Edge WebView2 Runtime。截图文字识别使用 Windows 本机 OCR 和相应的识别语言。
 
@@ -27,8 +27,8 @@
 
 ## 数据和升级
 
-数据保存在当前 Windows 用户的 %LOCALAPPDATA%\ArtistDesk 下。分发给朋友只需发送下载的 ZIP。迁移自己的数据时，请在设置中导出备份，再在另一台电脑上导入。导入会替换目的电脑的工作台数据。升级时先退出旧版，再从新解压的文件夹启动。
+数据保存在当前 Windows 用户的 %LOCALAPPDATA%\ArtistDesk 下。分发给朋友只需发送下载的 EXE。迁移自己的数据时，请在设置中导出备份，再在另一台电脑上导入。导入会替换目的电脑的工作台数据。升级时先退出旧版，再双击新版 EXE。
 
 ## 发行内容与验证
 
-压缩包包含程序、界面、字体、图标、本机 OCR 脚本、备份助手及第三方许可。首次演示使用内置示意图。回归测试覆盖计时与番茄钟、清空确认、模板保存和套用、日期打卡、参考图选择与排列、横竖布局和关闭偏好。Windows 真机上的摄像头、OCR 识别率、全局快捷键和多屏 DPI 仍需实际设备验证。
+启动包包含程序、界面、字体、图标、本机 OCR 脚本、备份助手及第三方许可。首次演示使用内置示意图。回归测试覆盖计时与番茄钟、清空确认、模板保存和套用、日期打卡、参考图选择与排列、横竖布局和关闭偏好。Windows 真机上的摄像头、OCR 识别率、全局快捷键和多屏 DPI 仍需实际设备验证。
