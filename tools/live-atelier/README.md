@@ -2,11 +2,11 @@
 
 给画师的 Windows 桌面工作台。用日历排委托，在旁边摆参考图，画画时把窗口收成一枚工时表盘。
 
-**1.7.2 · Windows x64**　[下载单文件启动版](https://github.com/MemeSubmarine/core-docking-station/raw/refs/heads/main/tools/live-atelier/LiveAtelier-1.7.2-Windows-x64.exe)
+**1.7.3 · Windows x64**　[下载单文件启动版](https://github.com/MemeSubmarine/core-docking-station/raw/refs/heads/main/tools/live-atelier/LiveAtelier-1.7.3-Windows-x64.exe)
 
 ## 第一次打开
 
-1. 下载并双击 LiveAtelier-1.7.2-Windows-x64.exe。
+1. 下载并双击 LiveAtelier-1.7.3-Windows-x64.exe。
 2. 启动器自动展开完整程序并打开工作台。
 3. 需要悬浮计时时，点击右上角「小表盘」。用顶栏切换横屏或竖屏，拖动日历与参考图之间的分隔条调整比例。
 
