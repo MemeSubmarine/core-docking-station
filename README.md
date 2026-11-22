@@ -1,6 +1,12 @@
-# 手书动效工具
+# 画师与手书工具
 
-用于制作手书动效的网页工具集合。
+## 活画师 · Live Atelier
+
+Windows 桌面排单与参考图工作台。用业务模板接单，把参考图铺在日历旁，用悬浮表盘记录绘画工时。
+
+**[下载活画师 1.7.1 · Windows x64 完整压缩包](tools/live-atelier/LiveAtelier-1.7.1-Windows-x64.zip?raw=true)**　·　[安装与使用说明](tools/live-atelier/README.md)
+
+解压后打开 **ArtistDesk.exe**。
 
 ## 工具目录
 
