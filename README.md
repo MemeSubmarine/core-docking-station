@@ -4,7 +4,7 @@
 
 Windows 桌面排单与参考图工作台。用业务模板接单，把参考图铺在日历旁，用悬浮表盘记录绘画工时。
 
-**[下载活画师 1.7.3 · Windows x64 单文件启动版](tools/live-atelier/LiveAtelier-1.7.3-Windows-x64.exe?raw=true)**　·　[安装与使用说明](tools/live-atelier/README.md)
+**[下载活画师 1.7.4 · Windows x64 单文件启动版](tools/live-atelier/LiveAtelier-1.7.4-Windows-x64.exe?raw=true)**　·　[安装与使用说明](tools/live-atelier/README.md)
 
 直接运行下载的 EXE 打开主窗口。
 
